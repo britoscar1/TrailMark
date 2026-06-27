@@ -6,19 +6,24 @@
 //
 
 import SwiftUI
+import TrailMarkCore
+
 
 struct ContentView: View {
+    @Environment(AppModel.self) private var model
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            TodayDashboardView()
+                .tabItem { Label("Today", systemImage: "sun.max.fill") }
         }
-        .padding()
+        .task {
+            await model.health.requestAuthorization()
+        }
     }
 }
 
 #Preview {
     ContentView()
 }
+
