@@ -15,10 +15,23 @@ struct ContentView: View {
     var body: some View {
         TabView {
             TodayDashboardView()
-                .tabItem { Label("Today", systemImage: "sun.max.fill") }
+                .tabItem { Label("Today", systemImage: "sun.max.fill")
+                }
+            
+            FieldJournalView()
+                .tabItem { Label("Journal", systemImage: "waveform") }
+            
+            RecoveryView()
+                .tabItem { Label("Recovery", systemImage: "bed.double.fill")
+                }
+            JourneyListView()
+                .tabItem { Label("Journey", systemImage: "safari.fill")
+                }
         }
+      
         .task {
             await model.health.requestAuthorization()
+            await model.health.refreshToday()
         }
     }
 }

@@ -28,13 +28,20 @@ public struct MediaMemo: Identifiable, Hashable, Sendable, Codable {
     public var duration: TimeInterval
     public var title: String
     
+    //geotag data
+    public var latitude: Double?
+    public var longitude: Double?
+    
+    
     public init(
         id: UUID = UUID(),
         kind: MemoKind,
         fileName: String,
         createdAt: Date = Date(),
         duration: TimeInterval = 0,
-        title: String = ""
+        title: String = "",
+        latitude: Double? = nil,
+        longitude: Double? = nil
     ) {
         self.id = id
         self.kind = kind
@@ -42,7 +49,19 @@ public struct MediaMemo: Identifiable, Hashable, Sendable, Codable {
         self.createdAt = createdAt
         self.duration = duration
         self.title = title.isEmpty ? Self.defaultTitle(for: kind, at: createdAt) : title
+        self.latitude = latitude
+        self.longitude = longitude
     }
+    
+    public mutating func setCoordinate(_ coordinate: CLLocationCoordinate2D?) {
+        latitude = coordinate?.latitude
+        longitude = coordinate?.longitude
+    }
+    public var coordinate: CLLocationCoordinate2D? {
+        guard let latitude, let longitude else { return nil }
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+    
     
     public var durationText: String {
         let formatter = DateComponentsFormatter()

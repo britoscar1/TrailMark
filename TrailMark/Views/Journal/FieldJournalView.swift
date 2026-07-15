@@ -34,7 +34,7 @@ struct FieldJournalView: View{
                 MemoDetailView(memo: memo)
             }
             .toolbar{
-                ToolbarItem(placement: .primaryAction){
+                ToolbarItemGroup(placement: .primaryAction){
                     Button{ showingVideoPicker = true } label: {
                         Image(systemName: "video.badge.plus")
                     }
@@ -53,6 +53,9 @@ struct FieldJournalView: View{
                 .ignoresSafeArea()
             }
         }
+    }
+    private func saveVideo(url: URL, duration: TimeInterval) {
+        try? model.media.add(kind: .video, movingFileFrom: url, duration: duration, coordinate: model.location.currentCoordinate)
     }
 }
 

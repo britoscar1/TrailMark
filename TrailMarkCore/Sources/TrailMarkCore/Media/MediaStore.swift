@@ -42,7 +42,8 @@ public final class MediaStore {
         kind: MemoKind,
         movingFileFrom sourceURL: URL,
         duration: TimeInterval,
-        title: String = ""
+        title: String = "",
+        coordinate: CLLocationCoordinate2D? = nil
     ) throws -> MediaMemo {
         let id = UUID()
         let ext = sourceURL.pathExtension.isEmpty ? (kind == .audio ? "m4a" : "mov") : sourceURL.pathExtension
@@ -62,6 +63,8 @@ public final class MediaStore {
             duration: duration,
             title: title
         )
+        memo.setCoordinate(coordinate)
+        
         memos.insert(memo, at: 0)
         persistentIndex()
         return memo

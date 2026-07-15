@@ -199,28 +199,28 @@ public final class HealthKitManager {
     
         
         
-        public func save(_ record: WorkoutRecord, acivity: HKWorkoutActivityType = .walking) async throws {
-            let config = HKWorkoutConfiguration()
-            config.activityType = acivity
+    public func save(_ record: WorkoutRecord, acivity: HKWorkoutActivityType = .walking) async throws {
+        let config = HKWorkoutConfiguration()
+        config.activityType = acivity
             
-            let builder = (healthStore: store, configuration: config, device: .local())
+        let builder = HKWorkoutBuilder(healthStore: store, configuration: config, device: .local())
             
-            try await builder.beginCollection(at: record.start)
+        try await builder.beginCollection(at: record.start)
             
-            var samples: [HKSample] = []
-            if record.activeEnergyKcal > 0{
-                let quantity = HKQuantity(unit: .kilocalorie(), doubleValue: record.activeEnergyKcal)
-                samples.append(HKCumulativeQuantitySample(type: distanceType, quantity: quantity, start: record.start, end: record.end))
-            }
-            
-            if !samples.isEmpty {
-                try await builder.addSamples(samples)
-            }
-            
-            try await builder.endCollection(at: record.end)
-            _ = try await builder.finishWorkout()
+        var samples: [HKSample] = []
+        if record.activeEnergyKcal > 0{
+            let quantity = HKQuantity(unit: .kilocalorie(), doubleValue: record.activeEnergyKcal)
+            samples.append(HKCumulativeQuantitySample(type: distanceType, quantity: quantity, start: record.start, end: record.end))
         }
+            
+        if !samples.isEmpty {
+            try await builder.addSamples(samples)
+        }
+            
+        try await builder.endCollection(at: record.end)
+        _ = try await builder.finishWorkout()
     }
+}
     
 
 
